@@ -20,6 +20,6 @@ jobs:
           client-payload: >
             {
               "repository": "insights-watcher", 
-              "pr_title": "test update water",
+              "pr_title": "test update watcher",
               "pr_number": "${{ github.event.pull_request.number }}"
             }
