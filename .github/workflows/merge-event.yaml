@@ -1,0 +1,25 @@
+name: dispatch event
+
+on: 
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: dispatch event
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.INSIGHTS_LINUX_DISPATCH_PAT }}
+          repository: genians/insights-linux
+          event-type: submodule_updated
+          client_payload: >
+            {
+              "repository": "${{ github.event.repository.name }}", 
+              "pr_title": "${{ github.event.pull_request.title }}",
+              "pr_number": "${{ github.event.pull_request.number }}"
+            }
