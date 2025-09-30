@@ -1,1 +1,1 @@
-test repository
+minsuyu repository
