@@ -17,7 +17,7 @@ jobs:
           token: ${{ secrets.INSIGHTS_LINUX_DISPATCH_PAT }}
           repository: genians/insights-linux
           event-type: submodule_updated
-          client_payload: >
+          client-payload: >
             {
               "repository": "${{ github.event.repository.name }}", 
               "pr_title": "${{ github.event.pull_request.title }}",
