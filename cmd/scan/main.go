@@ -8,10 +8,16 @@ import (
 )
 
 func main() {
+	if len(os.Args) < 2 {
+		fmt.Println("no input path")
+		return
+	}
+
 	if data, err := os.ReadFile("/home/minsu/read_test"); err == nil {
 		fmt.Printf("data: %s\n", data)
 	} else {
 		fmt.Println("error")
 	}
+
 	app.Run(os.Args[1:])
 }
