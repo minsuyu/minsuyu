@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"reflect"
 )
 
 type Threat map[string]any
@@ -23,29 +22,6 @@ func (t Threat) SetAVName(value AVName) {
 
 // 추가 정보를 반환합니다.
 func (t Threat) Information() map[string]string {
-	//info := t["Information"]
-	//fmt.Println("type", reflect.TypeOf(info))
-
-	// stringInfo, ok := info.(map[string]string)
-	// if ok {
-	// 	return stringInfo
-	// }
-
-	// newInfo := make(map[string]string)
-	// anyInfo, ok := info.(map[string]any)
-	// if ok {
-	// 	for key, val := range anyInfo {
-	// 		newInfo[key] = val.(string)
-	// 	}
-	// }
-	// t.SetInformation(newInfo)
-	// return newInfo
-
-	if t["Information"] == nil {
-		fmt.Println("Information is nil")
-		fmt.Println("type ", reflect.TypeOf(t["Information"]))
-	}
-
 	var value map[string]string
 	switch info := t["Information"].(type) {
 	case map[string]string:
@@ -53,11 +29,7 @@ func (t Threat) Information() map[string]string {
 	case map[string]any:
 		value = make(map[string]string, len(info))
 		for key, val := range info {
-			switch v := val.(type) {
-			case string:
-				value[key] = v
-			default:
-			}
+			value[key], _ = val.(string)
 		}
 	default:
 		value = make(map[string]string)
