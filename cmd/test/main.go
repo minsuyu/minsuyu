@@ -1,0 +1,107 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"reflect"
+)
+
+type Threat map[string]any
+
+type AVName string
+
+// 탐지에 사용된 AV 이름을 반환합니다.
+func (t Threat) AVName() AVName {
+	value, _ := t["AVName"].(string)
+	return AVName(value)
+}
+
+// 탐지에 사용된 AV 이름을 설정합니다.
+func (t Threat) SetAVName(value AVName) {
+	t["AVName"] = string(value)
+}
+
+// 추가 정보를 반환합니다.
+func (t Threat) Information() map[string]string {
+	//info := t["Information"]
+	//fmt.Println("type", reflect.TypeOf(info))
+
+	// stringInfo, ok := info.(map[string]string)
+	// if ok {
+	// 	return stringInfo
+	// }
+
+	// newInfo := make(map[string]string)
+	// anyInfo, ok := info.(map[string]any)
+	// if ok {
+	// 	for key, val := range anyInfo {
+	// 		newInfo[key] = val.(string)
+	// 	}
+	// }
+	// t.SetInformation(newInfo)
+	// return newInfo
+
+	if t["Information"] == nil {
+		fmt.Println("Information is nil")
+		fmt.Println("type ", reflect.TypeOf(t["Information"]))
+	}
+
+	var value map[string]string
+	switch info := t["Information"].(type) {
+	case map[string]string:
+		return info
+	case map[string]any:
+		value = make(map[string]string, len(info))
+		for key, val := range info {
+			switch v := val.(type) {
+			case string:
+				value[key] = v
+			default:
+			}
+		}
+	default:
+		value = make(map[string]string)
+	}
+
+	t.SetInformation(value)
+	return value
+}
+
+// 추가 정보를 설정합니다.
+func (t Threat) SetInformation(value map[string]string) {
+	t["Information"] = value
+}
+
+func (t Threat) SetInformationName(name string) {
+	t.Information()["Name"] = name
+}
+
+func (t Threat) InformationName() string {
+	return t.Information()["Name"]
+}
+
+func (t Threat) SetInformationCategory(category string) {
+	t.Information()["Category"] = category
+}
+
+func (t Threat) InformationCategory() string {
+	return t.Information()["Category"]
+}
+
+func main() {
+	threat := Threat{}
+	threat.SetAVName("Bitdefender")
+	threat.SetInformationName("test")
+	threat.SetInformationCategory("malware")
+
+	data, _ := json.Marshal(threat)
+	fmt.Println("message: ", string(data))
+
+	temp_threat := Threat{}
+	_ = json.Unmarshal(data, &temp_threat)
+
+	fmt.Println("Information: ", temp_threat)
+	fmt.Println("AVName: ", temp_threat.AVName())
+	fmt.Println("Information Name: ", temp_threat.InformationName())
+	fmt.Println("Information Category: ", temp_threat.InformationCategory())
+}
