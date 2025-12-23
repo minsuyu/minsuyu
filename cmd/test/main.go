@@ -9,18 +9,15 @@ type Threat map[string]any
 
 type AVName string
 
-// 탐지에 사용된 AV 이름을 반환합니다.
 func (t Threat) AVName() AVName {
 	value, _ := t["AVName"].(string)
 	return AVName(value)
 }
 
-// 탐지에 사용된 AV 이름을 설정합니다.
 func (t Threat) SetAVName(value AVName) {
 	t["AVName"] = string(value)
 }
 
-// 추가 정보를 반환합니다.
 func (t Threat) Information() map[string]string {
 	var value map[string]string
 	switch info := t["Information"].(type) {
@@ -39,7 +36,6 @@ func (t Threat) Information() map[string]string {
 	return value
 }
 
-// 추가 정보를 설정합니다.
 func (t Threat) SetInformation(value map[string]string) {
 	t["Information"] = value
 }
